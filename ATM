@@ -1,0 +1,184 @@
+#include <iostream>
+#include <string>
+#include <limits>
+using namespace std;
+
+int withdrawal(int balance);
+int deposit(int balance);
+string addCommas(string in);
+
+
+int main()
+{
+    string user;
+    int pin;
+    int balance;
+
+    cout << "                   WELCOME TO THE ATM SYSTEM!!!                 " << endl;
+    cout << "****************************************************************" << endl;
+
+    cout<< "Please enter your username: " << endl;
+    getline(cin, user);
+
+    cout << "Welcome " << user << "!" << endl;
+
+    int attempts = 5;
+    bool exit = false;
+
+        cout << "Please nominate your pin: " << endl;
+        cin >> pin;
+        int correctpin = pin;
+
+    while (attempts > 0 && !exit)
+    {
+        
+        cout << "Please enter your PIN: " << endl;
+        cin >> correctpin;
+
+        if (correctpin != pin) 
+        {
+            cout << "Invalid PIN. Please try again. " << --attempts << " attempts left." << endl;
+        }
+        else 
+        {
+                cout << "Your PIN has been verified." << endl;
+                int initialdeposit;
+                cout << "Please perform an initial deposit: " << endl;
+                cin >> initialdeposit;
+                balance = initialdeposit;
+
+            while (true)
+            {
+
+                string strbalance = to_string(balance);
+                
+                cout << "Your balance is " << addCommas(strbalance) << endl;
+                cout << "What would you like to do? Enter 'W' for withdrawal, 'D' for deposit, or 'Q' to quit: " << endl;
+
+                char option;
+                cin >> option;
+
+                switch(option)
+                {
+                    case 'W':
+                    case 'w':
+
+                 while (true) 
+                 {
+
+                  if (cin.fail())
+                  {
+                                   cin.clear(); // clear the error flags
+                                   cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); // discard the row
+                                   cout << "Invalid input. Please enter a valid value." << endl;
+                  } 
+                  else 
+                  {
+
+                  balance = withdrawal(balance);
+                  break;
+
+                  }
+                 }
+                    break;
+
+                    case 'D':
+                    case 'd':
+
+                      while (true) 
+                 {
+
+                  if (cin.fail())
+                  {
+                                   cin.clear(); // clear the error flags
+                                   cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); // discard the row
+                                   cout << "Invalid input. Please enter a valid value." << endl;
+                  } 
+                  else 
+                  {
+
+                  balance = deposit(balance);
+                  break;
+
+                  }
+                 }
+                    break;
+
+                    case 'Q':
+                    case 'q':
+
+                    exit = true;
+                    break;
+
+                    default:
+
+                    cout << "Invalid option. Please try again." << endl;
+                    break;
+                }
+            }
+        }
+    }
+    if (attempts == 0) 
+    {
+        cout << "You have exceeded the number of attempts. Please try again later." << endl;
+    }
+    return 0;
+}
+
+int withdrawal(int balance) 
+{
+    cout << "How much would you like to withdraw? " << endl;
+    int amount;
+    cin >> amount;
+
+    if (amount > balance) 
+    {
+        cout << "Insufficient funds" << endl;
+    }
+    else 
+    {
+        balance -= amount;
+        cout << "Withdrawal Successful! Your new balance is " << balance << endl;
+    }
+    return balance;
+}
+
+int deposit(int balance) 
+{
+    cout << "How much would you like to deposit? " << endl;
+    int amount;
+    cin >> amount;
+
+    if (amount < 0) 
+    {
+        cout << "Invalid deposit amount" << endl;
+    }
+    else 
+    {
+        balance += amount;
+        cout << "Deposit Successful! Your new balance is " << balance << endl;
+    }
+    return balance;
+}
+
+
+string addCommas(string in)
+{
+    const int length = in.length();
+    if(length < 4)
+    {
+        return in;
+    }
+    int inserted = 0;
+    int i = length % 3;
+    if(i == 0)
+    {
+        i = 3;
+    }
+    for(; i < length + inserted; i = i + 4)
+    {
+        in.insert(i, ",");
+        inserted++;
+    }
+    return in;
+}
